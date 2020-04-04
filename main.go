@@ -14,19 +14,28 @@ func pmiRequired(downPayment, homeValue float64) bool {
 
 func calculatePmi(homeValue, loanAmount, pmi float64) float64 {
 	var monthlyPmi float64
+
 	return monthlyPmi
 }
 
-func calculatePayment(homeValue, downPayment, loanTerm, interestRate, pmi, homeInsurance, propertyTaxes float64) float64 {
+func calculatePayment(homeValue, downPayment, interestRate, pmi, homeInsurance, propertyTaxes float64, loanTerm int) float64 {
+	fmt.Println(homeValue)
+	fmt.Println(downPayment)
 	var monthlyPayment float64
-	var n = loanTerm * 12
-	var i = interestRate / 100
-	var loanAmount = homeValue - downPayment
+	var n = float64(loanTerm * 12)
+	fmt.Println(n)
+	var i = (interestRate / 100) / 12
+	fmt.Println(i)
+	var loanAmount = (homeValue - downPayment)
+	fmt.Println(loanAmount)
 
 	var discountFactor = ((math.Pow(1+i, n)) - 1) / (i * math.Pow(1+i, n))
-	if pmiRequired(downPayment, homeValue) {
-		monthlyPayment = (loanAmount / discountFactor) + (pmi) + (homeInsurance) + (propertyTaxes)
-	}
+	/*
+		if pmiRequired(downPayment, homeValue) {
+			fmt.Println("PMI Required")
+			monthlyPayment = (loanAmount / discountFactor) + (pmi) + (homeInsurance) + (propertyTaxes)
+		}
+	*/
 
 	monthlyPayment = (loanAmount / discountFactor) + (homeInsurance / 12) + (propertyTaxes / 12)
 
@@ -34,37 +43,30 @@ func calculatePayment(homeValue, downPayment, loanTerm, interestRate, pmi, homeI
 }
 
 func main() {
-	var homeValue = 0.00
+	var homeValue float64
 	fmt.Print("Enter the Home Value: ")
 	fmt.Scan(&homeValue)
-	fmt.Println(homeValue)
-	var downPayment = 0.00
+	var downPayment float64
 	fmt.Print("Enter Your Down Payment: ")
 	fmt.Scan(&downPayment)
-	fmt.Println(downPayment)
-	var interestRate = 0.00
+	var interestRate float64
 	fmt.Print("Enter Your Interest Rate: ")
 	fmt.Scan(&interestRate)
-	fmt.Println(interestRate)
-	var loanTerm = 0
+	var loanTerm int
 	fmt.Print("Enter Your Loan Term in Years: ")
 	fmt.Scan(&loanTerm)
-	fmt.Println(loanTerm)
-	var pmi = 0.00
+	var pmi float64
 	fmt.Print("Enter Your PMI Percentage: ")
 	fmt.Scan(&pmi)
-	fmt.Println(pmi)
-	var homeInsurance = 0
+	var homeInsurance float64
 	fmt.Print("Enter Your Annual Home Insurance: ")
 	fmt.Scan(&homeInsurance)
-	fmt.Println(homeInsurance)
-	var propertyTaxes = 0
+	var propertyTaxes float64
 	fmt.Print("Enter Your Annual Property Taxes: ")
 	fmt.Scan(&propertyTaxes)
-	fmt.Println(propertyTaxes)
 
-	var monthlyPayment = calculatePayment(homeInsurance, downPayment, loanTerm, interestRate, pmi, homeInsurance, propertyTaxes)
-
+	var monthlyPayment = calculatePayment(homeValue, downPayment, interestRate, pmi, homeInsurance, propertyTaxes, loanTerm)
+	fmt.Printf("Your Monthly Payment is: $%f\n", monthlyPayment)
 }
 
 /*
