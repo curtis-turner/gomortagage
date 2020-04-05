@@ -98,7 +98,7 @@ func Scrape(p *Property) {
 	})
 }
 
-func Calculate(p *Property) {
+func MonthlyPayment(p *Property) {
 
 	var n = float64(p.LoanTerm * 12)
 	var i = (p.InterestRate / 100) / 12
@@ -111,7 +111,7 @@ func Calculate(p *Property) {
 
 	if pmiRequired(p) {
 		fmt.Println("PMI Required")
-		var pmi = calculatePmi(p)
+		var pmi = getPmi(p)
 		p.MonthlyPayment = (loanAmount / discountFactor) + (pmi / 12) + (p.HomeInsurance / 12) + (p.PropertyTaxes / 12) + (p.HOA / 12)
 	}
 
@@ -125,7 +125,7 @@ func pmiRequired(p *Property) bool {
 	return false
 }
 
-func calculatePmi(p *Property) float64 {
+func getPmi(p *Property) float64 {
 	var annualPmi float64
 	annualPmi = p.LoanAmount * (p.PMI / 100)
 	return annualPmi
@@ -148,7 +148,7 @@ var calculateCmd = &cobra.Command{
 		property.PMI, _ = cmd.Flags().GetFloat64("pmi")
 		property.HomeInsurance, _ = cmd.Flags().GetFloat64("home-insurance")
 		Scrape(&property)
-		Calculate(&property)
+		MonthlyPayment(&property)
 	},
 }
 

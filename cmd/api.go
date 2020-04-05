@@ -59,12 +59,12 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"message": "not found"}`))
 }
 
-func calculatePropertyPayment(w http.ResponseWriter, r *http.Request) {
+func calculate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var property Property
 	_ = json.NewDecoder(r.Body).Decode(&property)
 	Scrape(&property)
-	Calculate(&property)
+	MonthlyPayment(&property)
 	json.NewEncoder(w).Encode(&property)
 }
 
@@ -76,7 +76,7 @@ func httpServer(port string) {
 	api.HandleFunc("", put).Methods(http.MethodPut)
 	api.HandleFunc("", delete).Methods(http.MethodDelete)
 	api.HandleFunc("", notFound)
-	api.HandleFunc("/calculate", calculatePropertyPayment).Methods(http.MethodPost)
+	api.HandleFunc("/calculate", calculate).Methods(http.MethodPost)
 	var listen = ":" + port
 	log.Fatal(http.ListenAndServe(listen, r))
 }
