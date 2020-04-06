@@ -115,7 +115,7 @@ func MonthlyPayment(p *Property) {
 		p.MonthlyPayment = (loanAmount / discountFactor) + (pmi / 12) + (p.HomeInsurance / 12) + (p.PropertyTaxes / 12) + (p.HOA / 12)
 	}
 
-	fmt.Printf("Your Monthly Payment is: $%f\n", p.MonthlyPayment)
+	fmt.Println("Your Monthly Payment is: $", fmt.Sprintf("%.2f", p.MonthlyPayment))
 }
 
 func pmiRequired(p *Property) bool {
